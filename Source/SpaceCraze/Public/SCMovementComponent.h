@@ -18,13 +18,13 @@ public:
 	USCMovementComponent();
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		float ForwardMaxSpeed = 1200.0f;
+		float MaxSpeed = 1200.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		float RightMaxSpeed = 1200.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		float AccelInterpSpeed = 8.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		bool ShouldClampXY = false;
+		bool ClampToArea = false;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		FVector2D ClampXMinMax = FVector2D(-1200.0f, 600.0f);
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
@@ -36,11 +36,14 @@ public:
 
 private:
 	void MoveOwner(float DeltaTime);
-	float SmoothSpeed(float InputAxis, float CurrentSpeed, float TargetSpeed, float InterpSpeed);
-	float ForwardCurrSpeed;
+	void RotateOwner(const FVector Velocity);
+	FVector Acceleration(FVector InputAxis, float InterpSpeed);
+	FVector CurrVelocity;
+
 	float RightCurrSpeed;
 	float InputForward;
 	float InputRight;
+	UWorld* World;
 
 
 protected:

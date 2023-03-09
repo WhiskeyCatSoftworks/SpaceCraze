@@ -24,8 +24,8 @@ class SPACECRAZE_API ISCShipInterface
 public:
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Ship Interface")
-		void SetInputForward(float Input);
+		void SetInputForward(const float Input);
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Ship Interface")
-		void SetInputRight(float Input);
+		void SetInputRight(const float Input);
 };

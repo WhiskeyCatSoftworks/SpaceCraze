@@ -1,25 +1,17 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
+//For Handling Movement of Actor
 #include "SCMovementComponent.h"
 
-// Sets default values for this component's properties
 USCMovementComponent::USCMovementComponent()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-
-	// ...
 }
 
-
-void USCMovementComponent::SetInputForward_Implementation(float Input)
+void USCMovementComponent::SetInputForward_Implementation(const float Input)
 {
 	InputForward = Input;
 }
 
-void USCMovementComponent::SetInputRight_Implementation(float Input)
+void USCMovementComponent::SetInputRight_Implementation(const float Input)
 {
 	InputRight = Input;
 }
@@ -29,14 +21,12 @@ void USCMovementComponent::MoveOwner(float DeltaTime)
 	AActor* Owner = GetOwner();
 	FVector CurrentLocation = Owner->GetActorLocation();
 
-	ForwardCurrSpeed = SmoothSpeed(InputForward, ForwardCurrSpeed, ForwardMaxSpeed, AccelInterpSpeed);
-	RightCurrSpeed = SmoothSpeed(InputRight, RightCurrSpeed, RightMaxSpeed, AccelInterpSpeed);
+	FVector InputVector = FVector(InputForward, InputRight, 0.0f);
+	InputVector.Normalize();
+	CurrVelocity = Acceleration(InputVector, AccelInterpSpeed);
 
-	FVector ForwardMove = FVector(Owner->GetActorForwardVector() * (ForwardCurrSpeed * DeltaTime));
-	FVector RightMove = FVector(Owner->GetActorRightVector() * (RightCurrSpeed * DeltaTime));
-
-	FVector MoveToLocation = CurrentLocation + ForwardMove + RightMove;
-	if (ShouldClampXY)
+	FVector MoveToLocation = CurrentLocation + (CurrVelocity * DeltaTime);
+	if (ClampToArea)
 	{
 		float XClamped = FMath::Clamp(MoveToLocation.X, ClampXMinMax.X, ClampXMinMax.Y);
 		float YClamped = FMath::Clamp(MoveToLocation.Y, ClampYMinMax.X, ClampYMinMax.Y);
@@ -46,24 +36,30 @@ void USCMovementComponent::MoveOwner(float DeltaTime)
 	Owner->SetActorLocation(FVector(MoveToLocation.X, MoveToLocation.Y, 0.0f));
 }
 
-float USCMovementComponent::SmoothSpeed(float InputAxis, float CurrentSpeed, float TargetSpeed, float InterpSpeed)
+void USCMovementComponent::RotateOwner(const FVector Velocity)
 {
-	float SmoothedSpeed;
-	UWorld* World = GetWorld();
+	float RotAmount = FMath::GetMappedRangeValueClamped(FVector2D(-MaxSpeed, MaxSpeed), FVector2D(-20.0, 20.0f), Velocity.Y);
+	AActor* Owner = GetOwner();
+	Owner->SetActorRotation(FRotator(0.0f, 0.0f, RotAmount));
+}
+
+FVector USCMovementComponent::Acceleration(FVector InputAxis, float InterpSpeed)
+{
+	FVector InterpedVelocity;
 		if (World)
 		{
-			TargetSpeed = TargetSpeed * InputAxis;
-			SmoothedSpeed = FMath::FInterpTo(CurrentSpeed, TargetSpeed, World->GetDeltaSeconds(), InterpSpeed);
+			FVector TargetVelocity = InputAxis * MaxSpeed;
+			InterpedVelocity = FMath::VInterpTo(CurrVelocity, TargetVelocity, World->GetDeltaSeconds(), InterpSpeed);
 		}
 
-	return SmoothedSpeed;
+	return InterpedVelocity;
 }
 
 // Called when the game starts
 void USCMovementComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
+	World = GetWorld();
 	// ...
 	
 }
@@ -75,6 +71,7 @@ void USCMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	MoveOwner(DeltaTime);
+	RotateOwner(CurrVelocity);
 
 	// ...
 }
