@@ -1,10 +1,11 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright 2023 Whiskey Cat Softworks
 
 #pragma once
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 //#include "Components/StaticMeshComponent.h"
+#include "SCProjectile.h"
 #include "SCMovementComponent.h"
 #include "SCPlayerShip.generated.h"
 
@@ -21,7 +22,7 @@ public:
 	ASCPlayerShip();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectiles")
-		TSubclassOf<AActor> PrimaryProjectile;
+		TSubclassOf<ASCProjectile> PrimaryProjectile;
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Ship Properties")
@@ -30,8 +31,8 @@ private:
 		class USCMovementComponent* MovementComponent;
 
 	void SetupPlayerInput(class UInputComponent* InputComp);
-	void MoveForward(float Value);
-	void MoveRight(float Value);
+	void MoveForward(const float Value);
+	void MoveRight(const float Value);
 	void PrimaryFire();
 
 

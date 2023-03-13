@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright 2023 Whiskey Cat Softworks
 
 
 #include "SCPlayerShip.h"
@@ -26,12 +26,12 @@ void ASCPlayerShip::SetupPlayerInput(UInputComponent* InputComp)
 	InputComponent->BindAction("PrimaryAction", IE_Pressed, this, &ASCPlayerShip::PrimaryFire);
 }
 
-void ASCPlayerShip::MoveForward(float Value)
+void ASCPlayerShip::MoveForward(const float Value)
 {
 	MovementComponent->SetInputForward_Implementation(Value);
 }
 
-void ASCPlayerShip::MoveRight(float Value)
+void ASCPlayerShip::MoveRight(const float Value)
 {
 	MovementComponent->SetInputRight_Implementation(Value);
 }
@@ -43,9 +43,11 @@ void ASCPlayerShip::PrimaryFire()
 	{
 		FActorSpawnParameters SpawnParameters;
 		SpawnParameters.Owner = this;
+		SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 		FVector ProjectileLocation = GetActorLocation() + (GetActorForwardVector() * 110);
 
-		World->SpawnActor<AActor>(PrimaryProjectile, ProjectileLocation, FRotator(0,0,0), SpawnParameters);
+		ASCProjectile* ProjectileSpawned = World->SpawnActor<ASCProjectile>(PrimaryProjectile, ProjectileLocation, FRotator(0,0,0), SpawnParameters);
+		ProjectileSpawned->AddToForwardVelocity(MovementComponent->CurrVelocity.X);
 	}
 }
 

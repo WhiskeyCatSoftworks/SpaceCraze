@@ -1,3 +1,4 @@
+// Copyright 2023 Whiskey Cat Softworks
 //For Handling Movement of Actor
 #include "SCMovementComponent.h"
 

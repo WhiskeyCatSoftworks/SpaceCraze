@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright 2023 Whiskey Cat Softworks
 
 #pragma once
 
@@ -30,6 +30,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		FVector2D ClampYMinMax = FVector2D(-1600.0f, 1600.0f);
 
+	FVector CurrVelocity;
+
 	//Interface Functions
 	void SetInputForward_Implementation(float Input);
 	void SetInputRight_Implementation(float Input);
@@ -38,7 +40,6 @@ private:
 	void MoveOwner(float DeltaTime);
 	void RotateOwner(const FVector Velocity);
 	FVector Acceleration(FVector InputAxis, float InterpSpeed);
-	FVector CurrVelocity;
 
 	float RightCurrSpeed;
 	float InputForward;
