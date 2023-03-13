@@ -39,9 +39,13 @@ void ASCProjectile::AddToForwardVelocity(const float SpeedToAdd)
 void ASCProjectile::BeginPlay()
 {
 	Super::BeginPlay();
-
-    GetWorldTimerManager().SetTimer(TimerSelfDestruct, this, &ASCProjectile::SelfDestruct, TimeToSelfDestruct, false);
+    InitializeTimers();
 	
+}
+
+void ASCProjectile::InitializeTimers()
+{
+    GetWorldTimerManager().SetTimer(TimerSelfDestruct, this, &ASCProjectile::SelfDestruct, TimeToSelfDestruct, false);
 }
 
 // Called every frame

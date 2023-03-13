@@ -40,6 +40,8 @@ public:
 
 private:
 	FTimerHandle TimerSelfDestruct;
+
+	void InitializeTimers();
 	void SelfDestruct();
 
 };
