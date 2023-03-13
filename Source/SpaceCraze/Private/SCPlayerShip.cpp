@@ -16,11 +16,44 @@ ASCPlayerShip::ASCPlayerShip()
 	AddOwnedComponent(MovementComponent);
 }
 
+void ASCPlayerShip::SetupPlayerInput(UInputComponent* InputComp)
+{
+	// set up gameplay key bindings
+	check(InputComponent);
+	
+	InputComponent->BindAxis("MoveForward", this, &ASCPlayerShip::MoveForward);
+	InputComponent->BindAxis("MoveRight", this, &ASCPlayerShip::MoveRight);
+	InputComponent->BindAction("PrimaryAction", IE_Pressed, this, &ASCPlayerShip::PrimaryFire);
+}
+
+void ASCPlayerShip::MoveForward(float Value)
+{
+	MovementComponent->SetInputForward_Implementation(Value);
+}
+
+void ASCPlayerShip::MoveRight(float Value)
+{
+	MovementComponent->SetInputRight_Implementation(Value);
+}
+
+void ASCPlayerShip::PrimaryFire()
+{
+	UWorld* World = GetWorld();
+	if (World != NULL)
+	{
+		FActorSpawnParameters SpawnParameters;
+		SpawnParameters.Owner = this;
+		FVector ProjectileLocation = GetActorLocation() + (GetActorForwardVector() * 110);
+
+		World->SpawnActor<AActor>(PrimaryProjectile, ProjectileLocation, FRotator(0,0,0), SpawnParameters);
+	}
+}
+
 // Called when the game starts or when spawned
 void ASCPlayerShip::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	SetupPlayerInput(InputComponent);
 }
 
 // Called every frame

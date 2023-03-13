@@ -19,12 +19,21 @@ class SPACECRAZE_API ASCPlayerShip : public AActor
 public:	
 	// Sets default values for this actor's properties
 	ASCPlayerShip();
+	void SetupPlayerInput(class UInputComponent* InputComp);
+	void MoveForward(float Value);
+	void MoveRight(float Value);
+	void PrimaryFire();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectiles")
+		TSubclassOf<AActor> PrimaryProjectile;
+
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Ship Properties")
 		class UStaticMeshComponent* ShipMesh;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Ship Properties")
 		class USCMovementComponent* MovementComponent;
+
 
 protected:
 	// Called when the game starts or when spawned
