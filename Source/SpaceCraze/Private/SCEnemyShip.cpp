@@ -10,7 +10,8 @@ ASCEnemyShip::ASCEnemyShip()
 	PrimaryActorTick.bCanEverTick = true;
 
 	ShipMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Ship Mesh"));
-	ShipMesh->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	SetRootComponent(ShipMesh);
+	//ShipMesh->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 
 	MovementComponent = CreateDefaultSubobject<USCMovementComponent>(TEXT("Movement Component"));
 	AddOwnedComponent(MovementComponent);
@@ -21,7 +22,13 @@ void ASCEnemyShip::BeginPlay()
 {
 	Super::BeginPlay();
 	MoveForward();
+	ShipMesh->OnComponentHit.AddDynamic(this, &ASCEnemyShip::OnHit);
 	
+}
+
+void ASCEnemyShip::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
+{
+	Destroy();
 }
 
 void ASCEnemyShip::MoveForward()

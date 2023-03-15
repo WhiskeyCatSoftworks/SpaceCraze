@@ -35,7 +35,7 @@ void USCMovementComponent::MoveOwner(float DeltaTime)
 		MoveToLocation = FVector(XClamped, YClamped, 0.0f);
 	}
 
-	Owner->SetActorLocation(FVector(MoveToLocation.X, MoveToLocation.Y, 0.0f));
+	Owner->SetActorLocation(FVector(MoveToLocation.X, MoveToLocation.Y, 0.0f), true);
 }
 
 void USCMovementComponent::RotateOwner(const FVector Velocity)
@@ -63,10 +63,7 @@ void USCMovementComponent::BeginPlay()
 {
 	Super::BeginPlay();
 	World = GetWorld();
-	// ...
-	
 }
-
 
 // Called every frame
 void USCMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -75,7 +72,5 @@ void USCMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 
 	MoveOwner(DeltaTime);
 	RotateOwner(CurrVelocity);
-
-	// ...
 }
 

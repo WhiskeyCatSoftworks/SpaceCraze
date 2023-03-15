@@ -22,18 +22,20 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectiles")
 		TSubclassOf<ASCProjectile> PrimaryProjectile;
 
+	UFUNCTION()
+		void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
+
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Ship Properties")
 		class UStaticMeshComponent* ShipMesh;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Ship Properties")
 		class USCMovementComponent* MovementComponent;
-
+	
+	void MoveForward();
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-	void MoveForward();
 
 public:	
 	// Called every frame
