@@ -24,6 +24,7 @@ void USCMovementComponent::MoveOwner(float DeltaTime)
 
 	FVector InputVector = FVector(InputForward, InputRight, 0.0f);
 	InputVector.Normalize();
+	InputVector = FRotator(Owner->GetActorRotation()).RotateVector(InputVector);
 	CurrVelocity = Acceleration(InputVector, AccelInterpSpeed);
 
 	FVector MoveToLocation = CurrentLocation + (CurrVelocity * DeltaTime);
@@ -39,9 +40,10 @@ void USCMovementComponent::MoveOwner(float DeltaTime)
 
 void USCMovementComponent::RotateOwner(const FVector Velocity)
 {
-	float RotAmount = FMath::GetMappedRangeValueClamped(FVector2D(-MaxSpeed, MaxSpeed), FVector2D(-20.0, 20.0f), Velocity.Y);
 	AActor* Owner = GetOwner();
-	Owner->SetActorRotation(FRotator(0.0f, 0.0f, RotAmount));
+	FVector RotatedVelocity = FRotator(Owner->GetActorRotation()).RotateVector(Velocity);
+	float RotAmount = FMath::GetMappedRangeValueClamped(FVector2D(-MaxSpeed, MaxSpeed), FVector2D(-20.0, 20.0f), RotatedVelocity.Y);
+	Owner->SetActorRotation(FRotator(Owner->GetActorRotation().Pitch, Owner->GetActorRotation().Yaw, RotAmount));
 }
 
 FVector USCMovementComponent::Acceleration(FVector InputAxis, float InterpSpeed)
