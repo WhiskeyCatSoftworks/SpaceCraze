@@ -3,7 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-
+#include "Async/ParallelFor.h"
+#include "Misc/AES.h"
 namespace SCUtility
 {
 	void TestThread();

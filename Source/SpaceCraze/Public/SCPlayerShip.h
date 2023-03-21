@@ -4,8 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Async/ParallelFor.h"
-#include "Misc/AES.h"
 #include "SCProjectile.h"
 #include "SCMovementComponent.h"
 #include "SCPlayerShip.generated.h"
