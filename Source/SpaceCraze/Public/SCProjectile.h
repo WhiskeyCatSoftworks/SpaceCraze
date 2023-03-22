@@ -27,6 +27,8 @@ public:
 		float ProjectileSpeed = 1400.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Projectile Properties")
 		float TimeToSelfDestruct = 2.0f;
+	UFUNCTION()
+		void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
 
 	void AddToForwardVelocity(const float SpeedToAdd);
 

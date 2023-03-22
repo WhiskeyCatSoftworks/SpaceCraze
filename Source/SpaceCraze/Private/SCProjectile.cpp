@@ -40,6 +40,8 @@ void ASCProjectile::BeginPlay()
 {
 	Super::BeginPlay();
     InitializeTimers();
+
+    CollisionComponent->OnComponentHit.AddDynamic(this, &ASCProjectile::OnHit);
 	
 }
 
@@ -63,3 +65,7 @@ void ASCProjectile::SelfDestruct()
     }
 }
 
+void ASCProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
+{
+    SelfDestruct();
+}

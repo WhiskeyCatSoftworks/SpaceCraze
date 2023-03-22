@@ -38,15 +38,11 @@ void ASCPlayerShip::MoveRight(const float Value)
 
 void ASCPlayerShip::PrimaryFire()
 {
-	UWorld* World = GetWorld();
-	if (World != NULL)
-	{
-		FActorSpawnParameters SpawnParameters;
-		SpawnParameters.Owner = this;
-		SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-		FVector ProjectileLocation = GetActorLocation() + (GetActorForwardVector() * 110);
+	FVector ProjectileLocation = GetActorLocation() + (GetActorForwardVector() * 110);
+	FTransform SpawnTransform = FTransform(GetActorRotation(), ProjectileLocation, FVector(1.0f, 1.0f, 1.0f));
+	
+	ASCProjectile* ProjectileSpawned = SCUtility::SimpleSpawn(PrimaryProjectile, FTransform(), this);
 
-		ASCProjectile* ProjectileSpawned = World->SpawnActor<ASCProjectile>(PrimaryProjectile, ProjectileLocation, FRotator(0,0,0), SpawnParameters);
 		ProjectileSpawned->AddToForwardVelocity(MovementComponent->CurrVelocity.X);
 	}
 }

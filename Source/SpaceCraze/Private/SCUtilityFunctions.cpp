@@ -37,3 +37,20 @@ void SCUtility::PrintToScreen(FString Message)
 	if (GEngine)
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, (TEXT("%s"), Message));
 }
+
+AActor* SCUtility::SimpleSpawn(TSubclassOf<AActor> SpawnClass, FTransform SpawnTransform, AActor* Owner)
+{
+	AActor* SpawnedActor = nullptr;
+	UWorld* World = Owner->GetWorld();
+
+	if (World != NULL)
+	{
+		FActorSpawnParameters SpawnParameters;
+		SpawnParameters.Owner = Owner;
+		SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+		SpawnedActor = World->SpawnActor<AActor>(SpawnClass, FVector(SpawnTransform.GetLocation()), FRotator(SpawnTransform.GetRotation()), SpawnParameters);
+	}
+
+	return SpawnedActor;
+}
