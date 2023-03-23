@@ -41,10 +41,8 @@ void ASCPlayerShip::PrimaryFire()
 	FVector ProjectileLocation = GetActorLocation() + (GetActorForwardVector() * 110);
 	FTransform SpawnTransform = FTransform(GetActorRotation(), ProjectileLocation, FVector(1.0f, 1.0f, 1.0f));
 	
-	ASCProjectile* ProjectileSpawned = SCUtility::SimpleSpawn(PrimaryProjectile, FTransform(), this);
-
-		ProjectileSpawned->AddToForwardVelocity(MovementComponent->CurrVelocity.X);
-	}
+	ASCProjectile* ProjectileSpawned = SCUtility::SimpleSpawn <ASCProjectile>(PrimaryProjectile, SpawnTransform, this);
+	ProjectileSpawned->AddToForwardVelocity(MovementComponent->CurrVelocity.X);
 }
 
 // Called when the game starts or when spawned
