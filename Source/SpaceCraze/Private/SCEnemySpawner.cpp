@@ -28,6 +28,11 @@ void ASCEnemySpawner::Tick(float DeltaTime)
 
 void ASCEnemySpawner::SpawnEnemy()
 {
+	if (EnemyShipTypes.Num())
+	{
+		int32 Index = FMath::RandRange(0, EnemyShipTypes.Num() - 1);
+		SCUtility::SimpleSpawn<ASCEnemyShip>(EnemyShipTypes[0], GetActorTransform(), this);
+	}
 
 }
 

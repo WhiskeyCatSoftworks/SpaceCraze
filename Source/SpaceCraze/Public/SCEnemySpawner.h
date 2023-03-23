@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "SCEnemyShip.h"
+#include "SCUtilityFunctions.h"
 #include "SCEnemySpawner.generated.h"
 
 UCLASS()
@@ -13,6 +15,10 @@ class SPACECRAZE_API ASCEnemySpawner : public AActor
 	
 public:	
 	// Sets default values for this actor's properties
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawn Properties")
+	TArray<TSubclassOf<ASCEnemyShip>> EnemyShipTypes;
+	
+	//default constructor
 	ASCEnemySpawner();
 
 protected:
